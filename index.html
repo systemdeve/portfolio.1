@@ -3,11 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Clarence Cabali — Web Developer</title>
 <meta name="description" content="Portfolio of Clarence Cabali, web developer skilled in PHP, MySQL, Python, Java, and JavaScript.">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3070013351505360"
-     crossorigin="anonymous"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -885,6 +883,45 @@
   @media (max-width:480px){
     .faq-widget{right:78px; bottom:16px;}
     .faq-card{width:calc(100vw - 32px);}
+  }
+
+  /* ---------- Mobile fixes: keep both popup cards fully on-screen ---------- */
+  .chat-msg, .faq-card-head strong, .float-card-head strong, .faq-a, .float-card p{
+    overflow-wrap:anywhere;
+    word-break:normal;
+  }
+  .faq-card, .float-card{
+    max-height:calc(100vh - 110px);
+    max-height:calc(100dvh - 110px);
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+  }
+  @media (max-width:600px){
+    /* Pin the cards to the viewport (not to the small round buttons),
+       so they can never be pushed off the left edge. */
+    .faq-card, .float-card{
+      position:fixed;
+      left:12px;
+      right:12px;
+      width:auto;
+      max-width:none;
+      bottom:calc(84px + env(safe-area-inset-bottom, 0px));
+      max-height:calc(100vh - 110px - env(safe-area-inset-bottom, 0px));
+      max-height:calc(100dvh - 110px - env(safe-area-inset-bottom, 0px));
+      padding:16px;
+      box-sizing:border-box;
+    }
+    .faq-widget{right:78px; bottom:calc(16px + env(safe-area-inset-bottom, 0px));}
+    .float-widget{right:16px; bottom:calc(16px + env(safe-area-inset-bottom, 0px));}
+    .faq-card-head strong, .float-card-head strong{font-size:.95rem; line-height:1.35;}
+    .chat-log{max-height:min(240px, 32vh);}
+    .chat-msg{max-width:100%; font-size:.86rem;}
+    .chat-chip{font-size:.74rem; padding:7px 11px;}
+    /* 16px stops iOS from zooming in when the field is focused */
+    .chat-input-row input{font-size:16px;}
+    .chat-send{width:42px; height:42px;}
+    .float-contact a{font-size:.8rem; word-break:break-all;}
   }
 </style>
 </head>
@@ -2018,8 +2055,26 @@
 })();
 </script>
 <!-- GoatCounter visitor tracking (free, no Cloudflare) -->
-<script data-goatcounter="https://clarencecabali.goatcounter.com/count"
-        async src="//gc.zgo.at/count.js"></script>
+<script>
+  (function(){
+    // Skip the counter inside sandboxed previews (e.g. Claude's preview pane),
+    // where the security policy blocks gc.zgo.at. It loads normally on a real site.
+    var inPreview = location.protocol === 'about:' ||
+                    location.href.indexOf('about:srcdoc') === 0 ||
+                    /claudeusercontent\.com$/.test(location.hostname);
+    if(inPreview){
+      window.__skipGoatCounter = true;
+      var slot = document.getElementById('visitorCounterSlot');
+      if(slot) slot.style.display = 'none';
+      return;
+    }
+    var g = document.createElement('script');
+    g.async = true;
+    g.setAttribute('data-goatcounter', 'https://clarencecabali.goatcounter.com/count');
+    g.src = 'https://gc.zgo.at/count.js';
+    document.head.appendChild(g);
+  })();
+</script>
 
 <!-- Live visitor count badge next to the name (public, no API token needed) -->
 <!-- Requires: on your GoatCounter dashboard, go to Settings and turn on
@@ -2028,6 +2083,7 @@
   
 <script>
   (function(){
+    if(window.__skipGoatCounter) return;
     var tries = 0;
     var t = setInterval(function(){
       tries++;
