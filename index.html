@@ -673,9 +673,9 @@
     margin-bottom:14px;
   }
   .float-contact a{
-    display:flex;
-    align-items:center;
-    gap:8px;
+    display:block;
+    min-width:0;
+    overflow-wrap:anywhere;
     font-family:var(--mono);
     font-size:.82rem;
     color:var(--text);
@@ -923,6 +923,26 @@
     .chat-send{width:42px; height:42px;}
     .float-contact a{font-size:.8rem; word-break:break-all;}
   }
+
+  /* ---------- Project pictures (Firebase) ---------- */
+  .project-cover{position:relative; margin-bottom:16px; border-radius:var(--radius-sm); overflow:hidden; cursor:zoom-in; aspect-ratio:16/10; background:var(--surface-2);}
+  .project-cover img{width:100%; height:100%; object-fit:cover; display:block; transition:transform .25s ease;}
+  .project-cover:hover img{transform:scale(1.03);}
+  .cover-count{position:absolute; right:10px; bottom:10px; font-family:var(--mono); font-size:.72rem; background:rgba(11,13,17,.8); color:var(--text); border:1px solid var(--border); padding:4px 9px; border-radius:20px;}
+  .thumb-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(84px,1fr)); gap:10px; margin-top:12px;}
+  .thumb{position:relative; aspect-ratio:1; border-radius:var(--radius-sm); overflow:hidden; border:1px solid var(--border); background:var(--surface-2);}
+  .thumb img{width:100%; height:100%; object-fit:cover; display:block;}
+  .thumb .t-del{position:absolute; top:4px; right:4px; width:22px; height:22px; border-radius:50%; background:rgba(11,13,17,.85); color:var(--text); border:1px solid var(--border); line-height:1; font-size:15px;}
+  .thumb .t-del:hover{background:var(--danger); border-color:var(--danger);}
+  .thumb .t-cover{position:absolute; left:0; right:0; bottom:0; background:rgba(11,13,17,.85); color:var(--accent); font-size:.66rem; padding:4px 0; border:0;}
+  .thumb .cover-flag:not(:empty){position:absolute; left:4px; top:4px; background:var(--accent); color:#171310; font-size:.64rem; font-weight:600; padding:2px 7px; border-radius:10px;}
+  .lightbox{position:fixed; inset:0; z-index:1000; background:rgba(5,6,8,.92); display:none; align-items:center; justify-content:center; padding:24px;}
+  .lightbox.open{display:flex;}
+  .lightbox img{max-width:100%; max-height:82vh; border-radius:var(--radius-sm); display:block;}
+  .lb-btn{position:absolute; color:var(--text); background:rgba(21,25,32,.9); border:1px solid var(--border); width:44px; height:44px; border-radius:50%; font-size:22px; display:flex; align-items:center; justify-content:center;}
+  .lb-btn:hover{border-color:var(--accent); color:var(--accent);}
+  .lb-close{top:18px; right:18px;} .lb-prev{left:18px; top:50%; transform:translateY(-50%);} .lb-next{right:18px; top:50%; transform:translateY(-50%);}
+  .lb-count{position:absolute; bottom:18px; left:0; right:0; text-align:center; font-family:var(--mono); font-size:.8rem; color:var(--text-muted);}
 </style>
 </head>
 <body>
@@ -996,7 +1016,7 @@
         <div class="info-card"><div class="k">ROLE</div><div class="v" id="infoRole">Web Developer</div></div>
         <div class="info-card"><div class="k">EDUCATION</div><div class="v" id="infoEducation">Batangas State University — ARASOF Campus</div></div>
         <div class="info-card"><div class="k">PHONE</div><div class="v"><a id="infoPhoneLink" href="tel:+639919134617">0991 913 4617</a></div></div>
-        <div class="info-card"><div class="k">EMAIL</div><div class="v"><a id="infoEmailLink" href="mailto:clarencecabali30.socmed@gmail.com">clarencecabali30.socmed@gmail.com</a></div></div>
+        <div class="info-card"><div class="k">EMAIL</div><div class="v"><a id="infoEmailLink" href="mailto:clarencecabali.socmed@gmail.com">clarencecabali.socmed@gmail.com</a></div></div>
       </div>
     </div>
   </section>
@@ -1100,7 +1120,7 @@
           <h2>Let's work together</h2>
           <p>Have a project in mind or an opportunity to discuss? I'd be glad to hear from you.</p>
           <div class="cta-row" style="margin-bottom:0;">
-            <a class="btn primary" id="emailBtn" href="mailto:clarencecabali30.socmed@gmail.com">Send an email</a>
+            <a class="btn primary" id="emailBtn" href="mailto:clarencecabali.socmed@gmail.com">Send an email</a>
             <a class="btn" id="callBtn" href="tel:+639919134617">Call now</a>
           </div>
         </div>
@@ -1110,8 +1130,8 @@
             <button class="copy-btn" id="copyPhone" data-copy="09919134617">copy</button>
           </div>
           <div class="contact-row">
-            <div class="cr-info"><div class="cr-k">EMAIL</div><div class="cr-v" id="contactEmailText">clarencecabali30.socmed@gmail.com</div></div>
-            <button class="copy-btn" id="copyEmail" data-copy="clarencecabali30.socmed@gmail.com">copy</button>
+            <div class="cr-info"><div class="cr-k">EMAIL</div><div class="cr-v" id="contactEmailText">clarencecabali.socmed@gmail.com</div></div>
+            <button class="copy-btn" id="copyEmail" data-copy="clarencecabali.socmed@gmail.com">copy</button>
           </div>
         </div>
       </div>
@@ -1177,6 +1197,12 @@
         <div class="field">
           <label for="pLink">Project link (optional)</label>
           <input type="url" id="pLink" placeholder="https://github.com/...">
+        </div>
+        <div class="field">
+          <label for="pImages">Project pictures (up to 10)</label>
+          <input type="file" id="pImages" accept="image/*" multiple>
+          <div class="hint" id="pImagesHint">0 / 10 pictures</div>
+          <div class="thumb-grid" id="thumbGrid"></div>
         </div>
         <div class="modal-actions">
           <button type="button" class="btn" id="cancelBtn">Cancel</button>
@@ -1269,9 +1295,9 @@
           <div class="hint">separate each skill with a comma</div>
         </div>
         <div class="field">
-          <label for="fNewPassword">New editing password (optional)</label>
-          <input type="password" id="fNewPassword" autocomplete="new-password" placeholder="Leave blank to keep current password">
-          <div class="hint">this is the password needed to unlock editing next time</div>
+          <label for="fNewPassword" style="display:none">New editing password (optional)</label>
+          <input type="password" id="fNewPassword" style="display:none" autocomplete="new-password" placeholder="Leave blank to keep current password">
+          
         </div>
         <div class="modal-actions">
           <button type="button" class="btn" id="profileCancelBtn">Cancel</button>
@@ -1315,7 +1341,7 @@
     <p>Reach out directly and let's talk about your project.</p>
     <div class="float-contact">
       <a href="tel:+639919134617" id="floatPhoneLink">📞 0991 913 4617</a>
-      <a href="mailto:clarencecabali30.socmed@gmail.com" id="floatEmailLink">✉️ clarencecabali30.socmed@gmail.com</a>
+      <a href="mailto:clarencecabali.socmed@gmail.com" id="floatEmailLink">✉️ clarencecabali.socmed@gmail.com</a>
     </div>
   </div>
   <button type="button" class="float-toggle" id="floatToggle" aria-label="Contact me">
@@ -1324,8 +1350,19 @@
   </button>
 </div>
 
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Project pictures">
+  <button type="button" class="lb-btn lb-close" id="lbClose" aria-label="Close">&times;</button>
+  <button type="button" class="lb-btn lb-prev" id="lbPrev" aria-label="Previous">&#8249;</button>
+  <img id="lbImg" alt="">
+  <button type="button" class="lb-btn lb-next" id="lbNext" aria-label="Next">&#8250;</button>
+  <div class="lb-count" id="lbCount"></div>
+</div>
+
 <div class="toast" id="toast"></div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 (function(){
 
@@ -1346,7 +1383,7 @@
   var PROFILE_KEY = 'clarence_profile_v2';
   var PROJECTS_KEY = 'clarence_portfolio_projects_v2';
   var PASSWORD_KEY = 'clarence_edit_password_v1';
-  var DEFAULT_PASSWORD = 'cabali_30';
+  var DEFAULT_PASSWORD = ''; // no password is stored in the code - editing is verified by Firebase Auth
 
   function loadPassword(){
     try{
@@ -1363,7 +1400,7 @@
     tagline:"I build reliable web applications — from PHP and MySQL back ends to clean, usable interfaces.",
     phone:'0991 913 4617',
     phoneRaw:'09919134617',
-    email:'clarencecabali30.socmed@gmail.com',
+    email:'clarencecabali.socmed@gmail.com',
     education:'Batangas State University — ARASOF Campus',
     about:"I'm Clarence Cabali, a web developer who enjoys turning ideas into working software — from database-driven back ends to interfaces people actually enjoy using.\n\nI graduated from Batangas State University, ARASOF Campus, where I built the foundation for the stack I work in today. I like projects that mix logic and design: a clean PHP back end, a well-structured MySQL database, and a front end that doesn't get in the user's way.",
     skills:['PHP','HTML','CSS','Python','Java','JavaScript','MySQL','XAMPP'],
@@ -1371,15 +1408,20 @@
   };
 
   var defaultProjects = [
-    { id:'p1', title:'Inventory Management System', desc:'A PHP and MySQL web app for tracking stock levels, purchases, and sales, with a simple dashboard for reports.', tech:['PHP','MySQL','JavaScript'], link:'' },
-    { id:'p2', title:'Student Records Portal', desc:'A record-keeping system built during my studies for managing student information, grades, and attendance.', tech:['PHP','MySQL','HTML','CSS'], link:'' },
-    { id:'p3', title:'Personal Portfolio Site', desc:'This very site — a modern, self-editable portfolio built to showcase my projects and skills.', tech:['HTML','CSS','JavaScript'], link:'' }
+    { id:'p1', createdAt:1, title:'Inventory Management System', desc:'A PHP and MySQL web app for tracking stock levels, purchases, and sales, with a simple dashboard for reports.', tech:['PHP','MySQL','JavaScript'], link:'' },
+    { id:'p2', createdAt:2, title:'Student Records Portal', desc:'A record-keeping system built during my studies for managing student information, grades, and attendance.', tech:['PHP','MySQL','HTML','CSS'], link:'' },
+    { id:'p3', createdAt:3, title:'Personal Portfolio Site', desc:'This very site — a modern, self-editable portfolio built to showcase my projects and skills.', tech:['HTML','CSS','JavaScript'], link:'' }
   ];
 
   function loadProfile(){
     try{
       var raw = localStorage.getItem(PROFILE_KEY);
-      if(raw) return Object.assign({}, defaultProfile, JSON.parse(raw));
+      if(raw){
+        var saved = JSON.parse(raw);
+        // migrate the old email saved in this browser to the new one
+        if(saved.email === 'clarencecabali30.socmed@gmail.com') saved.email = 'clarencecabali.socmed@gmail.com';
+        return Object.assign({}, defaultProfile, saved);
+      }
     }catch(e){}
     return Object.assign({}, defaultProfile);
   }
@@ -1398,6 +1440,118 @@
   var profile = loadProfile();
   var projects = loadProjects();
   var editMode = false;
+
+  /* ---------- Firebase (Firestore + Auth) ----------
+     1. console.firebase.google.com -> create project -> add a Web app -> paste its config below.
+     2. Build -> Firestore Database -> Create database.
+     3. Build -> Authentication -> enable Email/Password, then add ONE user:
+        FIREBASE_OWNER_EMAIL with the same password you type when unlocking edit mode.
+     4. Firestore -> Rules: public read, only the owner can write (see chat / README). */
+  var FIREBASE_CONFIG = {
+    apiKey:'AIzaSyCZ-O06w6XquJhdTsJciS3A5UsLnv4Ohdg',
+    authDomain:'systemdeve-portfolio.firebaseapp.com',
+    projectId:'systemdeve-portfolio',
+    appId:'1:944022140361:web:83b28d6f2f9001ef46a418'
+  };
+  var FIREBASE_OWNER_EMAIL = 'clarencecabali.socmed@gmail.com';
+  var MAX_IMAGES = 10;
+  var db = null, auth = null, fbReady = false;
+  try{
+    if(window.firebase && FIREBASE_CONFIG.apiKey.indexOf('YOUR_') !== 0){
+      firebase.initializeApp(FIREBASE_CONFIG);
+      db = firebase.firestore();
+      auth = firebase.auth();
+      fbReady = true;
+    }
+  }catch(err){ console.warn('Firebase init failed', err); }
+
+  var imageCache = {};
+  function imagesRef(id){ return db.collection('projects').doc(id).collection('images'); }
+
+  function firebaseSignIn(pw){
+    if(!fbReady) return;
+    auth.signInWithEmailAndPassword(FIREBASE_OWNER_EMAIL, pw).catch(function(){
+      showToast('Firebase sign-in failed - pictures cannot be saved online');
+    });
+  }
+
+  function loadRemoteProjects(){
+    if(!fbReady) return;
+    db.collection('projects').orderBy('createdAt').get().then(function(snap){
+      if(snap.empty) return;
+      projects = snap.docs.map(function(d){ return Object.assign({ id:d.id }, d.data()); });
+      saveProjects(projects);
+      renderProjects();
+      renderProfile();
+    }).catch(function(err){ console.warn('Could not load projects', err); });
+  }
+
+  function coverHtml(p){
+    if(!p.cover) return '';
+    var n = p.imageCount || 1;
+    return '<div class="project-cover" data-id="' + p.id + '"><img src="' + p.cover + '" alt="' + escapeHtml(p.title) + ' preview" loading="lazy">' +
+      '<span class="cover-count">' + n + ' photo' + (n === 1 ? '' : 's') + '</span></div>';
+  }
+
+  /* Resize + compress in the browser so each picture stays well under Firestore's 1 MB document limit */
+  function compressImage(file){
+    return new Promise(function(resolve, reject){
+      var reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = function(){
+        var img = new Image();
+        img.onerror = reject;
+        img.onload = function(){
+          function draw(max, q){
+            var r = Math.min(1, max / Math.max(img.width, img.height));
+            var c = document.createElement('canvas');
+            c.width = Math.round(img.width * r); c.height = Math.round(img.height * r);
+            c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+            return c.toDataURL('image/jpeg', q);
+          }
+          var q = 0.72, full = draw(1280, q);
+          while(full.length > 600000 && q > 0.4){ q -= 0.1; full = draw(1280, q); }
+          resolve({ data:full, thumb:draw(480, 0.7) });
+        };
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /* ---------- Lightbox ---------- */
+  var lb = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lbImg');
+  var lbCount = document.getElementById('lbCount');
+  var lbList = [], lbIndex = 0;
+  function showLb(){
+    lbImg.src = lbList[lbIndex] || '';
+    lbCount.textContent = lbList.length > 1 ? (lbIndex + 1) + ' / ' + lbList.length : '';
+    document.getElementById('lbPrev').style.display = document.getElementById('lbNext').style.display = lbList.length > 1 ? 'flex' : 'none';
+  }
+  function closeLightbox(){ lb.classList.remove('open'); lbImg.src = ''; }
+  function stepLb(d){ if(lbList.length){ lbIndex = (lbIndex + d + lbList.length) % lbList.length; showLb(); } }
+  function openLightbox(id){
+    var p = projects.find(function(x){ return x.id === id; });
+    if(!p) return;
+    lbList = [p.cover]; lbIndex = 0; showLb(); lb.classList.add('open');
+    if(imageCache[id]){ lbList = imageCache[id]; showLb(); return; }
+    if(!fbReady) return;
+    imagesRef(id).orderBy('order').get().then(function(snap){
+      imageCache[id] = snap.docs.map(function(d){ return d.data().data; });
+      if(lb.classList.contains('open') && imageCache[id].length){ lbList = imageCache[id]; showLb(); }
+    }).catch(function(){ showToast('Could not load all pictures'); });
+  }
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  document.getElementById('lbPrev').addEventListener('click', function(){ stepLb(-1); });
+  document.getElementById('lbNext').addEventListener('click', function(){ stepLb(1); });
+  lb.addEventListener('click', function(e){ if(e.target === lb) closeLightbox(); });
+  document.addEventListener('keydown', function(e){
+    if(!lb.classList.contains('open')) return;
+    if(e.key === 'Escape') closeLightbox();
+    if(e.key === 'ArrowLeft') stepLb(-1);
+    if(e.key === 'ArrowRight') stepLb(1);
+  });
 
   function escapeHtml(str){
     var div = document.createElement('div');
@@ -1479,7 +1633,7 @@
             '<button class="icon-btn del" aria-label="Delete project" data-id="' + p.id + '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></button>' +
           '</div>'
         : '';
-      return '<div class="project-card" data-id="' + p.id + '">' +
+      return '<div class="project-card" data-id="' + p.id + '">' + coverHtml(p) +
         '<div class="project-top"><h3>' + escapeHtml(p.title) + '</h3></div>' +
         '<p>' + escapeHtml(p.desc) + '</p>' +
         '<div class="tag-row">' + techTags + '</div>' +
@@ -1503,6 +1657,7 @@
 
   renderProfile();
   renderProjects();
+  loadRemoteProjects();
 
   /* ---------- Edit-mode gate: 10 clicks on the photo ---------- */
   var photoTrigger = document.getElementById('photoTrigger');
@@ -1552,15 +1707,26 @@
   //    GoatCounter dashboard) -> API -> New token -> permission "Read stats".
   // 4. Paste your site code and token below.
   var GOATCOUNTER_SITE = 'clarencecabali'; // set
-  var GOATCOUNTER_TOKEN = 'c1i349go1leftbr3t5uvocyqofucaesm7erl1gxa9vkbbcvde'; // set
+  // The read-only token is NOT stored in the code. It is asked once when you unlock edit mode
+  // and kept only in this browser's localStorage.
+  function getGcToken(){
+    try{
+      var t = localStorage.getItem('gc_token');
+      if(t) return t;
+      t = window.prompt('Paste your GoatCounter read-only token (kept only in this browser). Cancel to skip.');
+      if(t && t.trim()){ localStorage.setItem('gc_token', t.trim()); return t.trim(); }
+    }catch(e){}
+    return '';
+  }
 
   function fetchAnalytics(){
     var msg = document.getElementById('analyticsMsg');
     var table = document.getElementById('analyticsTable');
     var tbody = document.getElementById('analyticsTableBody');
 
-    if(!GOATCOUNTER_SITE || !GOATCOUNTER_TOKEN){
-      msg.textContent = 'Set GOATCOUNTER_SITE and GOATCOUNTER_TOKEN in the script to connect GoatCounter.';
+    var gcToken = getGcToken();
+    if(!GOATCOUNTER_SITE || !gcToken){
+      msg.textContent = 'Click Refresh and paste your GoatCounter read-only token to see stats.';
       msg.classList.add('error');
       msg.style.display = 'block';
       table.style.display = 'none';
@@ -1579,7 +1745,7 @@
 
     fetch(apiUrl, {
       headers: {
-        'Authorization': 'Bearer ' + GOATCOUNTER_TOKEN,
+        'Authorization': 'Bearer ' + gcToken,
         'Content-Type': 'application/json'
       }
     })
@@ -1621,6 +1787,7 @@
         }
       })
       .catch(function(){
+        try{ localStorage.removeItem('gc_token'); }catch(e){}
         msg.textContent = 'Could not reach GoatCounter. Check the site code and token.';
         msg.classList.add('error');
       });
@@ -1654,18 +1821,25 @@
   });
 
   function checkPassword(){
-    if(fPasswordInput.value === loadPassword()){
+    var pw = fPasswordInput.value;
+    if(!fbReady){
+      closePasswordModal();
+      showToast('Set up Firebase first - editing is disabled until then');
+      return;
+    }
+    auth.signInWithEmailAndPassword(FIREBASE_OWNER_EMAIL, pw).then(function(){
       closePasswordModal();
       unlockEditMode();
-    }else{
+    }).catch(function(){
       passwordError.style.display = 'block';
       fPasswordInput.value = '';
       fPasswordInput.focus();
-    }
+    });
   }
 
   function lockEditMode(){
     editMode = false;
+    if(fbReady) auth.signOut();
     document.getElementById('editBadge').classList.remove('show');
     document.getElementById('addProjectBtn').style.display = 'none';
     document.getElementById('analytics').classList.remove('show');
@@ -1685,6 +1859,51 @@
   var fLink = document.getElementById('pLink');
   var editingId = null;
 
+  var pImages = document.getElementById('pImages');
+  var thumbGrid = document.getElementById('thumbGrid');
+  var modalImages = [];      // { id, data, thumb, isNew }
+  var removedImageIds = [];
+  var saving = false;
+
+  function renderThumbs(){
+    thumbGrid.innerHTML = modalImages.map(function(im, i){
+      return '<div class="thumb"><img src="' + im.thumb + '" alt="">' +
+        '<span class="cover-flag">' + (i === 0 ? 'Cover' : '') + '</span>' +
+        '<button type="button" class="t-del" data-i="' + i + '" aria-label="Remove picture">&times;</button>' +
+        (i > 0 ? '<button type="button" class="t-cover" data-i="' + i + '">Make cover</button>' : '') + '</div>';
+    }).join('');
+    document.getElementById('pImagesHint').textContent = fbReady
+      ? modalImages.length + ' / ' + MAX_IMAGES + ' pictures'
+      : 'Add your Firebase config in the script to enable pictures';
+    pImages.disabled = !fbReady || modalImages.length >= MAX_IMAGES;
+  }
+
+  pImages.addEventListener('change', async function(){
+    var files = Array.prototype.slice.call(pImages.files || []).filter(function(f){ return /^image\//.test(f.type); });
+    pImages.value = '';
+    var room = MAX_IMAGES - modalImages.length;
+    if(files.length > room) showToast('Max ' + MAX_IMAGES + ' pictures per project - added the first ' + room);
+    files = files.slice(0, room);
+    for(var i = 0; i < files.length; i++){
+      try{
+        var c = await compressImage(files[i]);
+        modalImages.push({ id:'i' + Date.now() + Math.random().toString(36).slice(2, 6), data:c.data, thumb:c.thumb, isNew:true });
+        renderThumbs();
+      }catch(err){ showToast('Could not read ' + files[i].name); }
+    }
+  });
+
+  thumbGrid.addEventListener('click', function(e){
+    var del = e.target.closest('.t-del'), cov = e.target.closest('.t-cover');
+    if(del){
+      var gone = modalImages.splice(+del.dataset.i, 1)[0];
+      if(gone && !gone.isNew) removedImageIds.push(gone.id);
+    }else if(cov){
+      modalImages.unshift(modalImages.splice(+cov.dataset.i, 1)[0]);
+    }else return;
+    renderThumbs();
+  });
+
   function openProjectModal(mode, project){
     editingId = project ? project.id : null;
     modalTitle.textContent = mode === 'edit' ? 'Edit project' : 'Add project';
@@ -1692,12 +1911,23 @@
     fDesc.value = project ? project.desc : '';
     fTech.value = project ? (project.tech || []).join(', ') : '';
     fLink.value = project ? (project.link || '') : '';
+    modalImages = []; removedImageIds = [];
+    renderThumbs();
+    if(project && fbReady && project.imageCount){
+      var wantId = project.id;
+      imagesRef(wantId).orderBy('order').get().then(function(snap){
+        if(editingId !== wantId) return;
+        modalImages = snap.docs.map(function(d){ var x = d.data(); return { id:d.id, data:x.data, thumb:x.thumb, isNew:false }; });
+        renderThumbs();
+      }).catch(function(){ showToast('Could not load existing pictures'); });
+    }
     backdrop.classList.add('open');
     setTimeout(function(){ fTitle.focus(); }, 50);
   }
   function closeProjectModal(){
     backdrop.classList.remove('open');
     editingId = null;
+    modalImages = []; removedImageIds = [];
     fTitle.value = ''; fDesc.value = ''; fTech.value = ''; fLink.value = '';
   }
 
@@ -1707,20 +1937,49 @@
 
   var saveProjectBtn = document.getElementById('saveProjectBtn');
 
-  function submitProjectForm(){
+  async function submitProjectForm(){
+    if(saving) return;
     var techList = fTech.value.split(',').map(function(t){ return t.trim(); }).filter(Boolean);
     var data = { title:fTitle.value.trim(), desc:fDesc.value.trim(), tech:techList, link:fLink.value.trim() };
     if(!data.title){ showToast('Please enter a project title'); fTitle.focus(); return; }
     if(!data.desc){ showToast('Please enter a project description'); fDesc.focus(); return; }
 
-    if(editingId){
-      projects = projects.map(function(p){ return p.id === editingId ? Object.assign({}, p, data) : p; });
-      showToast('Project updated');
-    }else{
-      data.id = 'p' + Date.now();
-      projects.push(data);
-      showToast('Project added');
+    var id = editingId || ('p' + Date.now());
+    var existing = projects.find(function(p){ return p.id === id; });
+    var proj = Object.assign({}, existing || {}, data, {
+      id:id,
+      createdAt:(existing && existing.createdAt) || Date.now(),
+      cover:modalImages.length ? modalImages[0].thumb : '',
+      imageCount:modalImages.length
+    });
+
+    if(fbReady){
+      if(!auth.currentUser){ showToast('Not signed in to Firebase - lock and unlock edit mode again'); return; }
+      saving = true;
+      saveProjectBtn.disabled = true; saveProjectBtn.textContent = 'Saving…';
+      try{
+        var batch = db.batch();
+        var pref = db.collection('projects').doc(id);
+        var pdata = Object.assign({}, proj); delete pdata.id;
+        batch.set(pref, pdata);
+        removedImageIds.forEach(function(rid){ batch.delete(pref.collection('images').doc(rid)); });
+        modalImages.forEach(function(im, i){
+          var r = pref.collection('images').doc(im.id);
+          if(im.isNew) batch.set(r, { data:im.data, thumb:im.thumb, order:i });
+          else batch.set(r, { order:i }, { merge:true });
+        });
+        await batch.commit();
+        delete imageCache[id];
+      }catch(err){
+        showToast('Could not save online: ' + (err.code || err.message));
+        saving = false; saveProjectBtn.disabled = false; saveProjectBtn.textContent = 'Save project';
+        return;
+      }
+      saving = false; saveProjectBtn.disabled = false; saveProjectBtn.textContent = 'Save project';
     }
+
+    if(existing){ projects = projects.map(function(p){ return p.id === id ? proj : p; }); showToast('Project updated'); }
+    else{ projects.push(proj); showToast('Project added'); }
     saveProjects(projects);
     renderProjects();
     renderProfile();
@@ -1736,6 +1995,8 @@
   document.getElementById('projectsGrid').addEventListener('click', function(e){
     var editBtn = e.target.closest('.icon-btn.edit');
     var delBtn = e.target.closest('.icon-btn.del');
+    var coverEl = e.target.closest('.project-cover');
+    if(coverEl){ openLightbox(coverEl.dataset.id); return; }
     if(editBtn){
       var proj = projects.find(function(p){ return p.id === editBtn.dataset.id; });
       if(proj) openProjectModal('edit', proj);
@@ -1745,11 +2006,24 @@
       var proj2 = projects.find(function(p){ return p.id === id; });
       var ok = window.confirm('Delete "' + (proj2 ? proj2.title : 'this project') + '"? This cannot be undone.');
       if(ok){
-        projects = projects.filter(function(p){ return p.id !== id; });
-        saveProjects(projects);
-        renderProjects();
-        renderProfile();
-        showToast('Project deleted');
+        (async function(){
+          try{
+            if(fbReady){
+              if(!auth.currentUser) throw { code:'not signed in' };
+              var snap = await imagesRef(id).get();
+              var b = db.batch();
+              snap.docs.forEach(function(d){ b.delete(d.ref); });
+              b.delete(db.collection('projects').doc(id));
+              await b.commit();
+              delete imageCache[id];
+            }
+            projects = projects.filter(function(p){ return p.id !== id; });
+            saveProjects(projects);
+            renderProjects();
+            renderProfile();
+            showToast('Project deleted');
+          }catch(err){ showToast('Could not delete online: ' + (err.code || err.message)); }
+        })();
       }
     }
   });
