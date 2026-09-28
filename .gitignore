@@ -1,0 +1,22 @@
+# Secrets - never commit these
+.env
+.env.*
+*.pem
+*.key
+*serviceAccount*.json
+*-firebase-adminsdk-*.json
+firebase-debug.log
+.firebase/
+
+# Old file that contained the previous token/password
+index1.html
+
+# Dependencies and build output
+node_modules/
+dist/
+
+# Editor / OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
