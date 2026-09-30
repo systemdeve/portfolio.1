@@ -32,10 +32,11 @@
     --maxw:1120px;
     --radius:12px;
     --radius-sm:8px;
+    --header-h:72px;
   }
 
   *{box-sizing:border-box;}
-  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%;}
+  html{scroll-behavior:smooth; -webkit-text-size-adjust:100%; scroll-padding-top:calc(var(--header-h) + env(safe-area-inset-top, 0px));}
   html,body{max-width:100%; overflow-x:hidden;}
   img{max-width:100%;}
   @media (prefers-reduced-motion: reduce){
@@ -45,6 +46,7 @@
 
   body{
     margin:0;
+    padding-top:calc(var(--header-h) + env(safe-area-inset-top, 0px));
     background:
       radial-gradient(1100px 520px at 82% -8%, rgba(212,162,76,.07), transparent 60%),
       var(--bg);
@@ -77,14 +79,15 @@
 
   /* ---------- Nav ---------- */
   header{
-    position:sticky; top:0; z-index:300;
+    position:fixed; top:0; left:0; right:0; width:100%; z-index:300;
+    padding-top:env(safe-area-inset-top, 0px);
     background:rgba(11,13,17,.72);
     backdrop-filter:blur(10px);
     border-bottom:1px solid var(--border-soft);
   }
   .nav{
     max-width:var(--maxw); margin:0 auto; padding:0 32px;
-    height:72px;
+    height:var(--header-h);
     display:flex; align-items:center; justify-content:space-between;
   }
   .logo{
@@ -170,6 +173,9 @@
     flex-direction:column;
     border-bottom:1px solid var(--border-soft);
     background:var(--bg-elevated);
+    max-height:calc(100vh - var(--header-h) - env(safe-area-inset-top, 0px));
+    max-height:calc(100dvh - var(--header-h) - env(safe-area-inset-top, 0px));
+    overflow-y:auto;
   }
   .mobile-nav.open{display:flex;}
   .mobile-nav a{
@@ -190,7 +196,7 @@
   }
 
   /* ---------- Sections ---------- */
-  section{padding:96px 0;}
+  section{padding:96px 0; scroll-margin-top:calc(var(--header-h) + env(safe-area-inset-top, 0px));}
   .section-border{border-top:1px solid var(--border-soft);}
 
   /* ---------- Hero ---------- */
@@ -611,7 +617,8 @@
   }
   @media (max-width:480px){
     .wrap{padding-left:16px; padding-right:16px;}
-    .nav{padding:0 16px; height:64px;}
+    :root{--header-h:64px;}
+    .nav{padding:0 16px;}
     .nav-cta{padding:8px 14px !important;}
     section{padding:56px 0;}
     #home{padding-top:64px; padding-bottom:56px;}
